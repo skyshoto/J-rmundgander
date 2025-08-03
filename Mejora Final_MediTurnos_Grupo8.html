@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reserva tu cita médica</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Encabezado -->
+  <header class="bg-blue-600 text-white p-6">
+    <h1 class="text-3xl font-bold text-center">Clínica Salud Total</h1>
+    <p class="text-center">Reserva tu cita médica de forma rápida y segura</p>
+  </header>
+
+  <!-- Vista del formulario -->
+  <main id="vista-formulario" class="max-w-md mx-auto bg-white mt-10 p-8 rounded-xl shadow-lg">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Formulario de Reserva</h2>
+    <form id="form-cita">
+      <!-- Nombre completo -->
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2" for="name">Nombre completo</label>
+        <input class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500" type="text" id="name" placeholder="Juan Pérez" required>
+      </div>
+
+      <!-- Correo electrónico -->
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2" for="email">Correo electrónico</label>
+        <input class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500" type="email" id="email" placeholder="juan.perez@mail.com" required>
+      </div>
+
+      <!-- Fecha de la cita -->
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2" for="date">Fecha de la cita</label>
+        <input class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500" type="date" id="date" required>
+      </div>
+
+      <!-- Hora de la cita -->
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2" for="time">Hora de la cita</label>
+        <input class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500" type="time" id="time" required>
+      </div>
+
+      <!-- Doctor -->
+      <div class="mb-6">
+        <label class="block text-gray-700 mb-2" for="doctor">Selecciona un doctor</label>
+        <select class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500" id="doctor" required>
+          <option value="">-- Selecciona --</option>
+          <option value="Dra. Gómez - Pediatría">Dra. Gómez - Pediatría</option>
+          <option value="Dr. Fernández - Medicina General">Dr. Fernández - Medicina General</option>
+          <option value="Dra. López - Ginecología">Dra. López - Ginecología</option>
+        </select>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex justify-between gap-4">
+        <button type="submit" class="w-1/2 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-300">Reservar Cita</button>
+        <button type="button" id="btn-ver-citas" class="w-1/2 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition duration-300">Ver Citas Reservadas</button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Vista de citas -->
+  <section id="vista-citas" class="hidden max-w-md mx-auto bg-white mt-10 p-8 rounded-xl shadow-lg">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Citas Registradas</h2>
+    <ul id="lista-citas" class="space-y-4"></ul>
+    <div class="text-center mt-4">
+      <button id="btn-volver" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Volver al formulario</button>
+    </div>
+  </section>
+
+  <!-- Pie de página -->
+  <footer class="text-center text-gray-600 mt-10 mb-4">
+    © 2025 Clínica Salud Total. Todos los derechos reservados.
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const form = document.getElementById('form-cita');
+    const citas = [];
+
+    const vistaFormulario = document.getElementById('vista-formulario');
+    const vistaCitas = document.getElementById('vista-citas');
+    const listaCitas = document.getElementById('lista-citas');
+    const btnVerCitas = document.getElementById('btn-ver-citas');
+    const btnVolver = document.getElementById('btn-volver');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const fecha = document.getElementById('date').value;
+      const hora = document.getElementById('time').value;
+      const doctor = document.getElementById('doctor').value;
+
+      if (!nombre || !email || !fecha || !hora || !doctor) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+
+      citas.push({ nombre, email, fecha, hora, doctor });
+      form.reset();
+      alert("¡Cita reservada exitosamente!");
+    });
+
+    btnVerCitas.addEventListener('click', () => {
+      if (citas.length === 0) {
+        alert("Aún no hay citas registradas.");
+        return;
+      }
+
+      vistaFormulario.classList.add('hidden');
+      vistaCitas.classList.remove('hidden');
+
+      listaCitas.innerHTML = citas.map(cita => `
+        <li class="border border-gray-200 p-4 rounded">
+          <p><strong>Nombre:</strong> ${cita.nombre}</p>
+          <p><strong>Email:</strong> ${cita.email}</p>
+          <p><strong>Fecha:</strong> ${cita.fecha}</p>
+          <p><strong>Hora:</strong> ${cita.hora}</p>
+          <p><strong>Doctor:</strong> ${cita.doctor}</p>
+        </li>
+      `).join('');
+    });
+
+    btnVolver.addEventListener('click', () => {
+      vistaCitas.classList.add('hidden');
+      vistaFormulario.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
